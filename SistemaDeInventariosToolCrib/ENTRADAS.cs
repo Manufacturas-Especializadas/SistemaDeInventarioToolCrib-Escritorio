@@ -101,11 +101,11 @@ namespace SistemaDeInventariosToolCrib
         {
             string query = @"
                             SELECT
-                                Id, numeroDeParte, existencias, minimo, maximo, 
+                                Id, categoria, numeroDeParte, existencias, minimo, maximo, 
                                 linea, descripcion, ubicacion,
                                 fecha, hora, modificado,
                                 unidadDeMedida, proveedor,
-                                noSerial, precio
+                                noSerial, precio, comentarios
                             FROM TOOLCRIB";
 
             tablaCompleta.Clear();
@@ -160,6 +160,7 @@ namespace SistemaDeInventariosToolCrib
             }
 
             paginaTabla.Columns["linea"]!.ColumnName = "Linea";
+            paginaTabla.Columns["categoria"]!.ColumnName = "Categoria";
             paginaTabla.Columns["numeroDeParte"]!.ColumnName = "Numero de parte";
             paginaTabla.Columns["descripcion"]!.ColumnName = "Descripcion";
             paginaTabla.Columns["ubicacion"]!.ColumnName = "Ubicacion";
@@ -173,6 +174,7 @@ namespace SistemaDeInventariosToolCrib
             paginaTabla.Columns["proveedor"]!.ColumnName = "Proveedor";
             paginaTabla.Columns["noSerial"]!.ColumnName = "No.Serial";
             paginaTabla.Columns["precio"]!.ColumnName = "Precio";
+            paginaTabla.Columns["comentarios"]!.ColumnName = "Comentarios";
 
             dtGdVwEntrada.DataSource = paginaTabla;
 
@@ -208,6 +210,7 @@ namespace SistemaDeInventariosToolCrib
             }
 
             filteredTable.Columns["linea"]!.ColumnName = "Linea";
+            filteredTable.Columns["categoria"]!.ColumnName = "Categoria";
             filteredTable.Columns["numeroDeParte"]!.ColumnName = "Numero de parte";
             filteredTable.Columns["descripcion"]!.ColumnName = "Descripcion";
             filteredTable.Columns["ubicacion"]!.ColumnName = "Ubicacion";
@@ -221,6 +224,7 @@ namespace SistemaDeInventariosToolCrib
             filteredTable.Columns["proveedor"]!.ColumnName = "Proveedor";
             filteredTable.Columns["noSerial"]!.ColumnName = "No.Serial";
             filteredTable.Columns["precio"]!.ColumnName = "Precio";
+            filteredTable.Columns["comentarios"]!.ColumnName = "Comentarios";
 
             dtGdVwEntrada.DataSource = filteredTable;
             lbPagination.Text = "Página 1 de 1";
@@ -359,6 +363,7 @@ namespace SistemaDeInventariosToolCrib
                     bulkCopy.DestinationTableName = nameTable;
 
                     bulkCopy.ColumnMappings.Add("LiNEA", "linea");
+                    bulkCopy.ColumnMappings.Add("Categoria", "categoria");
                     bulkCopy.ColumnMappings.Add("NUMERO DE PARTE", "numeroDeParte");
                     bulkCopy.ColumnMappings.Add("Descripcion", "descripcion");
                     bulkCopy.ColumnMappings.Add("Ubicacion", "ubicacion");
@@ -372,6 +377,7 @@ namespace SistemaDeInventariosToolCrib
                     bulkCopy.ColumnMappings.Add("PROVEEDOR", "proveedor");
                     bulkCopy.ColumnMappings.Add("NOSERIAL", "noSerial");
                     bulkCopy.ColumnMappings.Add("PRECIOS", "precio");
+                    bulkCopy.ColumnMappings.Add("Comentarios", "comentarios");
 
                     try
                     {
