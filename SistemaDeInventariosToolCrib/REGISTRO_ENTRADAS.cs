@@ -33,13 +33,14 @@ namespace SistemaDeInventariosToolCrib
 
                     string query = @"
                         INSERT INTO TOOLCRIB 
-                            (linea, numeroDeParte, descripcion, ubicacion, fecha, hora, modificado, unidadDeMedida, existencias, minimo, maximo, proveedor, noSerial, precio) 
+                            (linea, categoria,numeroDeParte, descripcion, ubicacion, fecha, hora, modificado, unidadDeMedida, existencias, minimo, maximo, proveedor, noSerial, precio, comentarios) 
                         VALUES 
-                            (@linea, @numeroDeParte, @descripcion, @ubicacion, @fecha, @hora, @modificado, @unidadDeMedida, @existencias, @minimo, @maximo, @proveedor, @noSerial, @precio)";
+                            (@linea, @categoria ,@numeroDeParte, @descripcion, @ubicacion, @fecha, @hora, @modificado, @unidadDeMedida, @existencias, @minimo, @maximo, @proveedor, @noSerial, @precio, @comentarios)";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {                        
                         cmd.Parameters.AddWithValue("@linea", txtBxLinea.Text.Trim());
+                        cmd.Parameters.AddWithValue("@categoria", txtBxCategoria.Text.Trim());
                         cmd.Parameters.AddWithValue("@numeroDeParte", txtBxNumeroDeParte.Text.Trim());
                         cmd.Parameters.AddWithValue("@descripcion", txtBxDescripcion.Text.Trim());
                         cmd.Parameters.AddWithValue("@ubicacion", txtBxUbicacion.Text.Trim());
@@ -53,6 +54,7 @@ namespace SistemaDeInventariosToolCrib
                         cmd.Parameters.AddWithValue("@proveedor", txtBxProveedor.Text.Trim());
                         cmd.Parameters.AddWithValue("@noSerial", txtBxNoSerial.Text.Trim());
                         cmd.Parameters.AddWithValue("@precio", txtBxPrecio.Text.Trim());
+                        cmd.Parameters.AddWithValue("@comentarios", txtBxComentarios.Text.Trim());
 
                         await cmd.ExecuteNonQueryAsync();
 

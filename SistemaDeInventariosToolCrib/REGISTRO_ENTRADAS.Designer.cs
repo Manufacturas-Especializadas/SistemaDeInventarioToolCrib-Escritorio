@@ -56,13 +56,17 @@
             txtBxPrecio = new TextBox();
             lbNoSerial = new Label();
             lbPrecio = new Label();
-            tblPnlButtons = new TableLayoutPanel();
-            btnGuardar = new Button();
-            btnCancelar = new Button();
-            lbUbicacion = new Label();
-            txtBxUbicacion = new TextBox();
             lbNumeroDeParte = new Label();
             txtBxNumeroDeParte = new TextBox();
+            lbUbicacion = new Label();
+            txtBxUbicacion = new TextBox();
+            btnCancelar = new Button();
+            btnGuardar = new Button();
+            tblPnlButtons = new TableLayoutPanel();
+            lbComentarios = new Label();
+            txtBxComentarios = new TextBox();
+            lbCategoria = new Label();
+            txtBxCategoria = new TextBox();
             panelTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxLogo).BeginInit();
             tblPnlMain.SuspendLayout();
@@ -78,7 +82,7 @@
             panelTitle.Location = new Point(0, 0);
             panelTitle.Margin = new Padding(4, 3, 4, 3);
             panelTitle.Name = "panelTitle";
-            panelTitle.Size = new Size(1363, 102);
+            panelTitle.Size = new Size(1376, 102);
             panelTitle.TabIndex = 1;
             // 
             // lbTitle
@@ -88,7 +92,7 @@
             lbTitle.Font = new Font("Arial", 25F);
             lbTitle.ForeColor = SystemColors.ControlLightLight;
             lbTitle.ImeMode = ImeMode.NoControl;
-            lbTitle.Location = new Point(442, 18);
+            lbTitle.Location = new Point(449, 18);
             lbTitle.Margin = new Padding(4, 0, 4, 0);
             lbTitle.Name = "lbTitle";
             lbTitle.Size = new Size(608, 57);
@@ -145,11 +149,16 @@
             tblPnlMain.Controls.Add(txtBxNumeroDeParte, 1, 1);
             tblPnlMain.Controls.Add(lbUbicacion, 0, 5);
             tblPnlMain.Controls.Add(txtBxUbicacion, 1, 5);
-            tblPnlMain.Controls.Add(tblPnlButtons, 3, 7);
+            tblPnlMain.Controls.Add(tblPnlButtons, 3, 8);
+            tblPnlMain.Controls.Add(txtBxComentarios, 3, 7);
+            tblPnlMain.Controls.Add(lbComentarios, 2, 7);
+            tblPnlMain.Controls.Add(lbCategoria, 0, 7);
+            tblPnlMain.Controls.Add(txtBxCategoria, 1, 7);
             tblPnlMain.Location = new Point(13, 120);
             tblPnlMain.Name = "tblPnlMain";
             tblPnlMain.Padding = new Padding(2);
-            tblPnlMain.RowCount = 8;
+            tblPnlMain.RowCount = 9;
+            tblPnlMain.RowStyles.Add(new RowStyle());
             tblPnlMain.RowStyles.Add(new RowStyle());
             tblPnlMain.RowStyles.Add(new RowStyle());
             tblPnlMain.RowStyles.Add(new RowStyle());
@@ -158,7 +167,7 @@
             tblPnlMain.RowStyles.Add(new RowStyle());
             tblPnlMain.RowStyles.Add(new RowStyle());
             tblPnlMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tblPnlMain.Size = new Size(1339, 344);
+            tblPnlMain.Size = new Size(1352, 386);
             tblPnlMain.TabIndex = 2;
             // 
             // lbLinea
@@ -178,16 +187,16 @@
             txtBxLinea.Font = new Font("Arial", 12F);
             txtBxLinea.Location = new Point(227, 5);
             txtBxLinea.Name = "txtBxLinea";
-            txtBxLinea.Size = new Size(475, 35);
+            txtBxLinea.Size = new Size(477, 35);
             txtBxLinea.TabIndex = 1;
             // 
             // txtBxDescripcion
             // 
             txtBxDescripcion.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtBxDescripcion.Font = new Font("Arial", 12F);
-            txtBxDescripcion.Location = new Point(858, 5);
+            txtBxDescripcion.Location = new Point(870, 5);
             txtBxDescripcion.Name = "txtBxDescripcion";
-            txtBxDescripcion.Size = new Size(476, 35);
+            txtBxDescripcion.Size = new Size(477, 35);
             txtBxDescripcion.TabIndex = 2;
             // 
             // lbDescripcion
@@ -195,7 +204,7 @@
             lbDescripcion.Anchor = AnchorStyles.Left;
             lbDescripcion.AutoSize = true;
             lbDescripcion.Font = new Font("Arial", 12F);
-            lbDescripcion.Location = new Point(708, 9);
+            lbDescripcion.Location = new Point(710, 9);
             lbDescripcion.Name = "lbDescripcion";
             lbDescripcion.Size = new Size(144, 27);
             lbDescripcion.TabIndex = 3;
@@ -206,7 +215,7 @@
             lbFecha.Anchor = AnchorStyles.Left;
             lbFecha.AutoSize = true;
             lbFecha.Font = new Font("Arial", 12F);
-            lbFecha.Location = new Point(708, 50);
+            lbFecha.Location = new Point(710, 50);
             lbFecha.Name = "lbFecha";
             lbFecha.Size = new Size(86, 27);
             lbFecha.TabIndex = 6;
@@ -216,9 +225,9 @@
             // 
             txtBxFecha.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtBxFecha.Font = new Font("Arial", 12F);
-            txtBxFecha.Location = new Point(858, 46);
+            txtBxFecha.Location = new Point(870, 46);
             txtBxFecha.Name = "txtBxFecha";
-            txtBxFecha.Size = new Size(476, 35);
+            txtBxFecha.Size = new Size(477, 35);
             txtBxFecha.TabIndex = 7;
             // 
             // lbHora
@@ -237,7 +246,7 @@
             lbModificado.Anchor = AnchorStyles.Left;
             lbModificado.AutoSize = true;
             lbModificado.Font = new Font("Arial", 12F);
-            lbModificado.Location = new Point(708, 91);
+            lbModificado.Location = new Point(710, 91);
             lbModificado.Name = "lbModificado";
             lbModificado.Size = new Size(134, 27);
             lbModificado.TabIndex = 9;
@@ -249,16 +258,16 @@
             txtBxHora.Font = new Font("Arial", 12F);
             txtBxHora.Location = new Point(227, 87);
             txtBxHora.Name = "txtBxHora";
-            txtBxHora.Size = new Size(475, 35);
+            txtBxHora.Size = new Size(477, 35);
             txtBxHora.TabIndex = 10;
             // 
             // txtBxModificado
             // 
             txtBxModificado.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtBxModificado.Font = new Font("Arial", 12F);
-            txtBxModificado.Location = new Point(858, 87);
+            txtBxModificado.Location = new Point(870, 87);
             txtBxModificado.Name = "txtBxModificado";
-            txtBxModificado.Size = new Size(476, 35);
+            txtBxModificado.Size = new Size(477, 35);
             txtBxModificado.TabIndex = 11;
             // 
             // txtBxUnidadDeMedida
@@ -267,16 +276,16 @@
             txtBxUnidadDeMedida.Font = new Font("Arial", 12F);
             txtBxUnidadDeMedida.Location = new Point(227, 128);
             txtBxUnidadDeMedida.Name = "txtBxUnidadDeMedida";
-            txtBxUnidadDeMedida.Size = new Size(475, 35);
+            txtBxUnidadDeMedida.Size = new Size(477, 35);
             txtBxUnidadDeMedida.TabIndex = 12;
             // 
             // txtBxExistencia
             // 
             txtBxExistencia.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtBxExistencia.Font = new Font("Arial", 12F);
-            txtBxExistencia.Location = new Point(858, 128);
+            txtBxExistencia.Location = new Point(870, 128);
             txtBxExistencia.Name = "txtBxExistencia";
-            txtBxExistencia.Size = new Size(476, 35);
+            txtBxExistencia.Size = new Size(477, 35);
             txtBxExistencia.TabIndex = 13;
             // 
             // lbUnidadDeMedida
@@ -295,7 +304,7 @@
             lbExistencia.Anchor = AnchorStyles.Left;
             lbExistencia.AutoSize = true;
             lbExistencia.Font = new Font("Arial", 12F);
-            lbExistencia.Location = new Point(708, 132);
+            lbExistencia.Location = new Point(710, 132);
             lbExistencia.Name = "lbExistencia";
             lbExistencia.Size = new Size(127, 27);
             lbExistencia.TabIndex = 15;
@@ -317,7 +326,7 @@
             lbMaximo.Anchor = AnchorStyles.Left;
             lbMaximo.AutoSize = true;
             lbMaximo.Font = new Font("Arial", 12F);
-            lbMaximo.Location = new Point(708, 173);
+            lbMaximo.Location = new Point(710, 173);
             lbMaximo.Name = "lbMaximo";
             lbMaximo.Size = new Size(100, 27);
             lbMaximo.TabIndex = 17;
@@ -329,25 +338,25 @@
             txtBxMinimo.Font = new Font("Arial", 12F);
             txtBxMinimo.Location = new Point(227, 169);
             txtBxMinimo.Name = "txtBxMinimo";
-            txtBxMinimo.Size = new Size(475, 35);
+            txtBxMinimo.Size = new Size(477, 35);
             txtBxMinimo.TabIndex = 18;
             // 
             // txtBxMaximo
             // 
             txtBxMaximo.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtBxMaximo.Font = new Font("Arial", 12F);
-            txtBxMaximo.Location = new Point(858, 169);
+            txtBxMaximo.Location = new Point(870, 169);
             txtBxMaximo.Name = "txtBxMaximo";
-            txtBxMaximo.Size = new Size(476, 35);
+            txtBxMaximo.Size = new Size(477, 35);
             txtBxMaximo.TabIndex = 19;
             // 
             // txtBxProveedor
             // 
             txtBxProveedor.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtBxProveedor.Font = new Font("Arial", 12F);
-            txtBxProveedor.Location = new Point(858, 210);
+            txtBxProveedor.Location = new Point(870, 210);
             txtBxProveedor.Name = "txtBxProveedor";
-            txtBxProveedor.Size = new Size(476, 35);
+            txtBxProveedor.Size = new Size(477, 35);
             txtBxProveedor.TabIndex = 21;
             // 
             // lbProveedor
@@ -355,9 +364,9 @@
             lbProveedor.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lbProveedor.AutoSize = true;
             lbProveedor.Font = new Font("Arial", 12F);
-            lbProveedor.Location = new Point(708, 214);
+            lbProveedor.Location = new Point(710, 214);
             lbProveedor.Name = "lbProveedor";
-            lbProveedor.Size = new Size(144, 27);
+            lbProveedor.Size = new Size(154, 27);
             lbProveedor.TabIndex = 23;
             lbProveedor.Text = "Proveedor:";
             // 
@@ -367,16 +376,16 @@
             txtBxNoSerial.Font = new Font("Arial", 12F);
             txtBxNoSerial.Location = new Point(227, 251);
             txtBxNoSerial.Name = "txtBxNoSerial";
-            txtBxNoSerial.Size = new Size(475, 35);
+            txtBxNoSerial.Size = new Size(477, 35);
             txtBxNoSerial.TabIndex = 24;
             // 
             // txtBxPrecio
             // 
             txtBxPrecio.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtBxPrecio.Font = new Font("Arial", 12F);
-            txtBxPrecio.Location = new Point(858, 251);
+            txtBxPrecio.Location = new Point(870, 251);
             txtBxPrecio.Name = "txtBxPrecio";
-            txtBxPrecio.Size = new Size(476, 35);
+            txtBxPrecio.Size = new Size(477, 35);
             txtBxPrecio.TabIndex = 25;
             // 
             // lbNoSerial
@@ -395,78 +404,11 @@
             lbPrecio.Anchor = AnchorStyles.Left;
             lbPrecio.AutoSize = true;
             lbPrecio.Font = new Font("Arial", 12F);
-            lbPrecio.Location = new Point(708, 255);
+            lbPrecio.Location = new Point(710, 255);
             lbPrecio.Name = "lbPrecio";
             lbPrecio.Size = new Size(86, 27);
             lbPrecio.TabIndex = 27;
             lbPrecio.Text = "Precio:";
-            // 
-            // tblPnlButtons
-            // 
-            tblPnlButtons.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            tblPnlButtons.ColumnCount = 2;
-            tblPnlButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tblPnlButtons.ColumnStyles.Add(new ColumnStyle());
-            tblPnlButtons.Controls.Add(btnGuardar, 0, 0);
-            tblPnlButtons.Controls.Add(btnCancelar, 1, 0);
-            tblPnlButtons.Location = new Point(858, 292);
-            tblPnlButtons.Name = "tblPnlButtons";
-            tblPnlButtons.RowCount = 1;
-            tblPnlButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tblPnlButtons.Size = new Size(476, 47);
-            tblPnlButtons.TabIndex = 28;
-            // 
-            // btnGuardar
-            // 
-            btnGuardar.Anchor = AnchorStyles.Right;
-            btnGuardar.BackColor = Color.LightSteelBlue;
-            btnGuardar.Cursor = Cursors.Hand;
-            btnGuardar.FlatStyle = FlatStyle.Flat;
-            btnGuardar.Font = new Font("Arial", 12F);
-            btnGuardar.ForeColor = Color.Black;
-            btnGuardar.Location = new Point(173, 3);
-            btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(147, 41);
-            btnGuardar.TabIndex = 0;
-            btnGuardar.Text = "Guardar";
-            btnGuardar.UseVisualStyleBackColor = false;
-            btnGuardar.Click += btnGuardar_Click;
-            // 
-            // btnCancelar
-            // 
-            btnCancelar.Anchor = AnchorStyles.Right;
-            btnCancelar.BackColor = Color.LightSteelBlue;
-            btnCancelar.Cursor = Cursors.Hand;
-            btnCancelar.FlatStyle = FlatStyle.Flat;
-            btnCancelar.Font = new Font("Arial", 12F);
-            btnCancelar.ForeColor = Color.Black;
-            btnCancelar.Location = new Point(326, 3);
-            btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(147, 41);
-            btnCancelar.TabIndex = 1;
-            btnCancelar.Text = "Cancelar";
-            btnCancelar.UseVisualStyleBackColor = false;
-            btnCancelar.Click += btnCancelar_Click;
-            // 
-            // lbUbicacion
-            // 
-            lbUbicacion.Anchor = AnchorStyles.Left;
-            lbUbicacion.AutoSize = true;
-            lbUbicacion.Font = new Font("Arial", 12F);
-            lbUbicacion.Location = new Point(5, 214);
-            lbUbicacion.Name = "lbUbicacion";
-            lbUbicacion.Size = new Size(124, 27);
-            lbUbicacion.TabIndex = 4;
-            lbUbicacion.Text = "Ubicación:";
-            // 
-            // txtBxUbicacion
-            // 
-            txtBxUbicacion.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtBxUbicacion.Font = new Font("Arial", 12F);
-            txtBxUbicacion.Location = new Point(227, 210);
-            txtBxUbicacion.Name = "txtBxUbicacion";
-            txtBxUbicacion.Size = new Size(475, 35);
-            txtBxUbicacion.TabIndex = 5;
             // 
             // lbNumeroDeParte
             // 
@@ -485,15 +427,122 @@
             txtBxNumeroDeParte.Font = new Font("Arial", 12F);
             txtBxNumeroDeParte.Location = new Point(227, 46);
             txtBxNumeroDeParte.Name = "txtBxNumeroDeParte";
-            txtBxNumeroDeParte.Size = new Size(475, 35);
+            txtBxNumeroDeParte.Size = new Size(477, 35);
             txtBxNumeroDeParte.TabIndex = 30;
+            // 
+            // lbUbicacion
+            // 
+            lbUbicacion.Anchor = AnchorStyles.Left;
+            lbUbicacion.AutoSize = true;
+            lbUbicacion.Font = new Font("Arial", 12F);
+            lbUbicacion.Location = new Point(5, 214);
+            lbUbicacion.Name = "lbUbicacion";
+            lbUbicacion.Size = new Size(124, 27);
+            lbUbicacion.TabIndex = 4;
+            lbUbicacion.Text = "Ubicación:";
+            // 
+            // txtBxUbicacion
+            // 
+            txtBxUbicacion.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtBxUbicacion.Font = new Font("Arial", 12F);
+            txtBxUbicacion.Location = new Point(227, 210);
+            txtBxUbicacion.Name = "txtBxUbicacion";
+            txtBxUbicacion.Size = new Size(477, 35);
+            txtBxUbicacion.TabIndex = 5;
+            // 
+            // btnCancelar
+            // 
+            btnCancelar.Anchor = AnchorStyles.Right;
+            btnCancelar.BackColor = Color.LightSteelBlue;
+            btnCancelar.Cursor = Cursors.Hand;
+            btnCancelar.FlatStyle = FlatStyle.Flat;
+            btnCancelar.Font = new Font("Arial", 12F);
+            btnCancelar.ForeColor = Color.Black;
+            btnCancelar.Location = new Point(326, 3);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Size = new Size(147, 41);
+            btnCancelar.TabIndex = 1;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.UseVisualStyleBackColor = false;
+            btnCancelar.Click += btnCancelar_Click;
+            // 
+            // btnGuardar
+            // 
+            btnGuardar.Anchor = AnchorStyles.Right;
+            btnGuardar.BackColor = Color.LightSteelBlue;
+            btnGuardar.Cursor = Cursors.Hand;
+            btnGuardar.FlatStyle = FlatStyle.Flat;
+            btnGuardar.Font = new Font("Arial", 12F);
+            btnGuardar.ForeColor = Color.Black;
+            btnGuardar.Location = new Point(173, 3);
+            btnGuardar.Name = "btnGuardar";
+            btnGuardar.Size = new Size(147, 41);
+            btnGuardar.TabIndex = 0;
+            btnGuardar.Text = "Guardar";
+            btnGuardar.UseVisualStyleBackColor = false;
+            btnGuardar.Click += btnGuardar_Click;
+            // 
+            // tblPnlButtons
+            // 
+            tblPnlButtons.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            tblPnlButtons.ColumnCount = 2;
+            tblPnlButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tblPnlButtons.ColumnStyles.Add(new ColumnStyle());
+            tblPnlButtons.Controls.Add(btnCancelar, 1, 0);
+            tblPnlButtons.Controls.Add(btnGuardar, 0, 0);
+            tblPnlButtons.Location = new Point(871, 333);
+            tblPnlButtons.Name = "tblPnlButtons";
+            tblPnlButtons.RowCount = 1;
+            tblPnlButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tblPnlButtons.Size = new Size(476, 47);
+            tblPnlButtons.TabIndex = 28;
+            // 
+            // lbComentarios
+            // 
+            lbComentarios.Anchor = AnchorStyles.Left;
+            lbComentarios.AutoSize = true;
+            lbComentarios.Font = new Font("Arial", 12F);
+            lbComentarios.Location = new Point(710, 296);
+            lbComentarios.Name = "lbComentarios";
+            lbComentarios.Size = new Size(154, 27);
+            lbComentarios.TabIndex = 31;
+            lbComentarios.Text = "Comentarios:";
+            // 
+            // txtBxComentarios
+            // 
+            txtBxComentarios.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtBxComentarios.Font = new Font("Arial", 12F);
+            txtBxComentarios.Location = new Point(870, 292);
+            txtBxComentarios.Name = "txtBxComentarios";
+            txtBxComentarios.Size = new Size(477, 35);
+            txtBxComentarios.TabIndex = 32;
+            // 
+            // lbCategoria
+            // 
+            lbCategoria.Anchor = AnchorStyles.Left;
+            lbCategoria.AutoSize = true;
+            lbCategoria.Font = new Font("Arial", 12F);
+            lbCategoria.Location = new Point(5, 296);
+            lbCategoria.Name = "lbCategoria";
+            lbCategoria.Size = new Size(122, 27);
+            lbCategoria.TabIndex = 33;
+            lbCategoria.Text = "Categoria:";
+            // 
+            // txtBxCategoria
+            // 
+            txtBxCategoria.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtBxCategoria.Font = new Font("Arial", 12F);
+            txtBxCategoria.Location = new Point(227, 292);
+            txtBxCategoria.Name = "txtBxCategoria";
+            txtBxCategoria.Size = new Size(477, 35);
+            txtBxCategoria.TabIndex = 34;
             // 
             // REGISTRO_ENTRADAS
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Azure;
-            ClientSize = new Size(1363, 669);
+            ClientSize = new Size(1376, 642);
             Controls.Add(tblPnlMain);
             Controls.Add(panelTitle);
             Name = "REGISTRO_ENTRADAS";
@@ -539,10 +588,14 @@
         private TextBox txtBxPrecio;
         private Label lbNoSerial;
         private Label lbPrecio;
-        private TableLayoutPanel tblPnlButtons;
-        private Button btnGuardar;
-        private Button btnCancelar;
         private Label lbNumeroDeParte;
         private TextBox txtBxNumeroDeParte;
+        private Label lbComentarios;
+        private TextBox txtBxComentarios;
+        private TableLayoutPanel tblPnlButtons;
+        private Button btnCancelar;
+        private Button btnGuardar;
+        private Label lbCategoria;
+        private TextBox txtBxCategoria;
     }
 }
