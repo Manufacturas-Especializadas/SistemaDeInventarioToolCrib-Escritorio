@@ -13,7 +13,7 @@ namespace SistemaDeInventariosToolCrib
         private int filasPorPagina = 20;
         private DataTable tablaCompleta = new DataTable();
         private int? currentMaterialId = null;
-        private string currentPartNumber = string.Empty;
+        private string currentSku = string.Empty;
 
         public ENTRADAS()
         {
@@ -22,7 +22,7 @@ namespace SistemaDeInventariosToolCrib
 
         private async void ENTRADAS_Load(object sender, EventArgs e)
         {
-            await CargarDatos();
+            await LoadData();
         }
 
         private async void txtBxEntrada_KeyPress(object sender, KeyPressEventArgs e)
@@ -39,7 +39,7 @@ namespace SistemaDeInventariosToolCrib
                     return;
                 }
 
-                if (!string.IsNullOrEmpty(currentPartNumber) && barcode == currentPartNumber)
+                if (!string.IsNullOrEmpty(currentSku) && barcode == currentSku)
                 {
                     await UpdateStockAsync(currentMaterialId!.Value);
                 }
@@ -49,18 +49,18 @@ namespace SistemaDeInventariosToolCrib
 
                     if (found)
                     {
-                        MostrarSoloRegistro(currentMaterialId!.Value);
+                        ShowOnlyRegister(currentMaterialId!.Value);
                     }
                     else
                     {
-                        MessageBox.Show("Número de parte no encontrado");
+                        MessageBox.Show("Sku no encontrado");
                         txtBxEntrada.Clear();
                     }
                 }
             }
         }
 
-        private async Task<bool> SearchMaterialByPartNumberAsync(string partNumber)
+        private async Task<bool> SearchMaterialByPartNumberAsync(string sku)
         {
             try
             {
@@ -71,18 +71,18 @@ namespace SistemaDeInventariosToolCrib
                         return false;
                     }
 
-                    string query = "SELECT Id FROM TOOLCRIB WHERE numeroDeParte = @partNumber";
+                    string query = "SELECT Id FROM TOOLCRIB WHERE sku = @sku";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@partNumber", partNumber);
+                        cmd.Parameters.AddWithValue("@sku", sku);
 
                         var result = await cmd.ExecuteScalarAsync();
 
                         if (result != null && int.TryParse(result.ToString(), out int id))
                         {
                             currentMaterialId = id;
-                            currentPartNumber = partNumber;
+                            currentSku = sku;
                             return true;
                         }
 
@@ -97,15 +97,16 @@ namespace SistemaDeInventariosToolCrib
             }
         }
 
-        private async Task CargarDatos()
+        private async Task LoadData()
         {
             string query = @"
                             SELECT
-                                Id, categoria, numeroDeParte, existencias, minimo, maximo, 
-                                linea, descripcion, ubicacion,
-                                fecha, hora, modificado,
-                                unidadDeMedida, proveedor,
-                                noSerial, precio, comentarios
+                                Id, sku, existencia,
+                                minimo, maximo,
+                                linea, comentarios, categoria, fecha, hora,
+                                ubicacion, material, unidadDeMedida,
+                                proveedor, numeroDeSerie, costoUnitario,
+                                ramos, santa, aluminio, cobre, modificado
                             FROM TOOLCRIB";
 
             tablaCompleta.Clear();
@@ -129,10 +130,10 @@ namespace SistemaDeInventariosToolCrib
             }
             tablaCompleta.PrimaryKey = new DataColumn[] { tablaCompleta.Columns["Id"]! };
 
-            MostrarPagina(paginaActual);
+            ShowPage(paginaActual);
         }
 
-        private void MostrarPagina(int pagina)
+        private void ShowPage(int pagina)
         {
             if (tablaCompleta.Rows.Count == 0)
             {
@@ -159,22 +160,26 @@ namespace SistemaDeInventariosToolCrib
                 paginaTabla.ImportRow(tablaCompleta.Rows[i]);
             }
 
+            paginaTabla.Columns["sku"]!.ColumnName = "Sku";
+            paginaTabla.Columns["existencia"]!.ColumnName = "Existencia";
+            paginaTabla.Columns["minimo"]!.ColumnName = "Minimo";
+            paginaTabla.Columns["maximo"]!.ColumnName = "Maximo";
             paginaTabla.Columns["linea"]!.ColumnName = "Linea";
+            paginaTabla.Columns["comentarios"]!.ColumnName = "Comentarios";
             paginaTabla.Columns["categoria"]!.ColumnName = "Categoria";
-            paginaTabla.Columns["numeroDeParte"]!.ColumnName = "Numero de parte";
-            paginaTabla.Columns["descripcion"]!.ColumnName = "Descripcion";
             paginaTabla.Columns["ubicacion"]!.ColumnName = "Ubicacion";
             paginaTabla.Columns["fecha"]!.ColumnName = "Fecha";
             paginaTabla.Columns["hora"]!.ColumnName = "Hora";
+            paginaTabla.Columns["material"]!.ColumnName = "Material";
             paginaTabla.Columns["modificado"]!.ColumnName = "Modificado";
             paginaTabla.Columns["unidadDeMedida"]!.ColumnName = "Unidad de medida";
-            paginaTabla.Columns["existencias"]!.ColumnName = "Existencias";
-            paginaTabla.Columns["minimo"]!.ColumnName = "Minimo";
-            paginaTabla.Columns["maximo"]!.ColumnName = "Máximo";
             paginaTabla.Columns["proveedor"]!.ColumnName = "Proveedor";
-            paginaTabla.Columns["noSerial"]!.ColumnName = "No.Serial";
-            paginaTabla.Columns["precio"]!.ColumnName = "Precio";
-            paginaTabla.Columns["comentarios"]!.ColumnName = "Comentarios";
+            paginaTabla.Columns["numeroDeSerie"]!.ColumnName = "Numero de serie";
+            paginaTabla.Columns["costoUnitario"]!.ColumnName = "Costo unitario";
+            paginaTabla.Columns["ramos"]!.ColumnName = "Ramos";
+            paginaTabla.Columns["santa"]!.ColumnName = "Santa";
+            paginaTabla.Columns["aluminio"]!.ColumnName = "Aluminio";
+            paginaTabla.Columns["cobre"]!.ColumnName = "Cobre";
 
             dtGdVwEntrada.DataSource = paginaTabla;
 
@@ -189,7 +194,7 @@ namespace SistemaDeInventariosToolCrib
             lbPagination.Text = $"Página {paginaActual} de {totalPages}";
         }
 
-        private void MostrarSoloRegistro(int id)
+        private void ShowOnlyRegister(int id)
         {
             if (tablaCompleta.Rows.Count == 0)
             {
@@ -208,23 +213,27 @@ namespace SistemaDeInventariosToolCrib
                     filteredTable.ImportRow(row);
                 }
             }
-
+                
+            filteredTable.Columns["sku"]!.ColumnName = "Sku";
+            filteredTable.Columns["existencia"]!.ColumnName = "Existencia";
+            filteredTable.Columns["minimo"]!.ColumnName = "Minimo";
+            filteredTable.Columns["maximo"]!.ColumnName = "Maximo";
             filteredTable.Columns["linea"]!.ColumnName = "Linea";
+            filteredTable.Columns["comentarios"]!.ColumnName = "Comentarios";
             filteredTable.Columns["categoria"]!.ColumnName = "Categoria";
-            filteredTable.Columns["numeroDeParte"]!.ColumnName = "Numero de parte";
-            filteredTable.Columns["descripcion"]!.ColumnName = "Descripcion";
             filteredTable.Columns["ubicacion"]!.ColumnName = "Ubicacion";
             filteredTable.Columns["fecha"]!.ColumnName = "Fecha";
             filteredTable.Columns["hora"]!.ColumnName = "Hora";
+            filteredTable.Columns["material"]!.ColumnName = "Material";
             filteredTable.Columns["modificado"]!.ColumnName = "Modificado";
             filteredTable.Columns["unidadDeMedida"]!.ColumnName = "Unidad de medida";
-            filteredTable.Columns["existencias"]!.ColumnName = "Existencias";
-            filteredTable.Columns["minimo"]!.ColumnName = "Minimo";
-            filteredTable.Columns["maximo"]!.ColumnName = "Maximo";
             filteredTable.Columns["proveedor"]!.ColumnName = "Proveedor";
-            filteredTable.Columns["noSerial"]!.ColumnName = "No.Serial";
-            filteredTable.Columns["precio"]!.ColumnName = "Precio";
-            filteredTable.Columns["comentarios"]!.ColumnName = "Comentarios";
+            filteredTable.Columns["numeroDeSerie"]!.ColumnName = "Numero de serie";
+            filteredTable.Columns["costoUnitario"]!.ColumnName = "Costo unitario";
+            filteredTable.Columns["ramos"]!.ColumnName = "Ramos";
+            filteredTable.Columns["santa"]!.ColumnName = "Santa";
+            filteredTable.Columns["aluminio"]!.ColumnName = "Aluminio";
+            filteredTable.Columns["cobre"]!.ColumnName = "Cobre";
 
             dtGdVwEntrada.DataSource = filteredTable;
             lbPagination.Text = "Página 1 de 1";
@@ -290,26 +299,56 @@ namespace SistemaDeInventariosToolCrib
                 {
                     switch (col.ColumnName.ToLower())
                     {
-                        case "descripcion":
-                            ValidateAndCleanStringColumn(row, "Descripcion", 255);
+                        case "ramos":
+                            ValidateAndCleanStringColumn(row, "RAMOS", 30);
+                            break;
+                        case "santa":
+                            ValidateAndCleanStringColumn(row, "SANTA", 30);
+                            break;
+                        case "aluminio":
+                            ValidateAndCleanStringColumn(row, "ALUMINIO", 30);
+                            break;
+                        case "cobre":
+                            ValidateAndCleanStringColumn(row, "COBRE", 30);
                             break;
                         case "linea":
-                            ValidateAndCleanStringColumn(row, "Linea", 100);
+                            ValidateAndCleanStringColumn(row, "LINEA", 100);
+                            break;
+                        case "comentarios":
+                            ValidateAndCleanStringColumn(row, "COMENTARIOS", 200);
+                            break;
+                        case "categoria":
+                            ValidateAndCleanStringColumn(row, "CATEGORIA", 20);
+                            break;
+                        case "sku":
+                            ValidateAndCleanStringColumn(row, "SKU", 120);
+                            break;
+                        case "material":
+                            ValidateAndCleanStringColumn(row, "MATERIAL TOOL CRIB", 200);
                             break;
                         case "ubicacion":
-                            ValidateAndCleanStringColumn(row, "Ubicacion", 100);
+                            ValidateAndCleanStringColumn(row, "UBICACION", 20);
+                            break;
+                        case "fecha":
+                            ValidateAndCleanStringColumn(row, "FECHA", 40);
+                            break;
+                        case "hora":
+                            ValidateAndCleanStringColumn(row, "HORA", 40);
                             break;
                         case "modificado":
-                            ValidateAndCleanStringColumn(row, "Modificado", 50);
+                            ValidateAndCleanStringColumn(row, "UBICACION", 20);
                             break;
-                        case "unidaddemedida":
-                            ValidateAndCleanStringColumn(row, "UnidadDeMedida", 255);
+                        case "unidadDeMedida":
+                            ValidateAndCleanStringColumn(row, "UNIDAD DE MEDIDA", 30);
                             break;
                         case "proveedor":
-                            ValidateAndCleanStringColumn(row, "Proveedor", 100);
+                            ValidateAndCleanStringColumn(row, "PROVEEDOR", 70);
                             break;
-                        case "noserial":
-                            ValidateAndCleanStringColumn(row, "NoSerial", 50);
+                        case "numeroDeSerie":
+                            ValidateAndCleanStringColumn(row, "NUMERO DE SERIE", 80);
+                            break;
+                        case "costoUnitario":
+                            ValidateAndCleanStringColumn(row, "COSTO UNITARIO", 80);
                             break;
                         default:
 
@@ -362,22 +401,25 @@ namespace SistemaDeInventariosToolCrib
                 {
                     bulkCopy.DestinationTableName = nameTable;
 
-                    bulkCopy.ColumnMappings.Add("LiNEA", "linea");
-                    bulkCopy.ColumnMappings.Add("Categoria", "categoria");
-                    bulkCopy.ColumnMappings.Add("NUMERO DE PARTE", "numeroDeParte");
-                    bulkCopy.ColumnMappings.Add("Descripcion", "descripcion");
-                    bulkCopy.ColumnMappings.Add("Ubicacion", "ubicacion");
+                    bulkCopy.ColumnMappings.Add("RAMOS", "ramos");
+                    bulkCopy.ColumnMappings.Add("SANTA", "santa");
+                    bulkCopy.ColumnMappings.Add("ALUMINIO", "aluminio");
+                    bulkCopy.ColumnMappings.Add("LINEA", "linea");
+                    bulkCopy.ColumnMappings.Add("COMENTARIOS", "comentarios");
+                    bulkCopy.ColumnMappings.Add("CATEGORIA", "categoria");
+                    bulkCopy.ColumnMappings.Add("SKU", "sku");
+                    bulkCopy.ColumnMappings.Add("MATERIAL TOOLCRIB", "material");
+                    bulkCopy.ColumnMappings.Add("UBICACION", "ubicacion");
                     bulkCopy.ColumnMappings.Add("FECHA", "fecha");
                     bulkCopy.ColumnMappings.Add("HORA", "hora");
-                    bulkCopy.ColumnMappings.Add("MODIFICADO", "modificado");
-                    bulkCopy.ColumnMappings.Add("UNIDADDEMEDIDA", "unidadDeMedida");
-                    bulkCopy.ColumnMappings.Add("existencia", "existencias");
+                    bulkCopy.ColumnMappings.Add("MODIFICADO POR", "modificado");
+                    bulkCopy.ColumnMappings.Add("UNIDAD DE MEDIDA", "unidadDeMedida");
+                    bulkCopy.ColumnMappings.Add("EXISTENCIA", "existencia");
                     bulkCopy.ColumnMappings.Add("MINIMO", "minimo");
                     bulkCopy.ColumnMappings.Add("MAXIMO", "maximo");
                     bulkCopy.ColumnMappings.Add("PROVEEDOR", "proveedor");
-                    bulkCopy.ColumnMappings.Add("NOSERIAL", "noSerial");
-                    bulkCopy.ColumnMappings.Add("PRECIOS", "precio");
-                    bulkCopy.ColumnMappings.Add("Comentarios", "comentarios");
+                    bulkCopy.ColumnMappings.Add("NUMERO DE SERIE", "numeroDeSerie");
+                    bulkCopy.ColumnMappings.Add("COSTO UNITARIO", "costoUnitario");
 
                     try
                     {
@@ -463,7 +505,7 @@ namespace SistemaDeInventariosToolCrib
                         return;
                     }
 
-                    string query = "UPDATE TOOLCRIB SET existencias = existencias + 1 WHERE Id = @id";
+                    string query = "UPDATE TOOLCRIB SET existencia = existencia + 1 WHERE Id = @id";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -477,9 +519,9 @@ namespace SistemaDeInventariosToolCrib
 
                             if (row != null)
                             {
-                                row["existencias"] = Convert.ToInt32(row["existencias"]) + 1;
+                                row["existencia"] = Convert.ToInt32(row["existencia"]) + 1;
 
-                                MostrarSoloRegistro(id);
+                                ShowOnlyRegister(id);
                             }
                         }
                     }
@@ -579,7 +621,7 @@ namespace SistemaDeInventariosToolCrib
 
                 if (eliminando)
                 {
-                    await CargarDatos();
+                    await LoadData();
                     MessageBox.Show("Registro eliminando correctamente");
                 }
                 else
@@ -596,7 +638,7 @@ namespace SistemaDeInventariosToolCrib
 
             if (paginaActual < totalPages)
             {
-                MostrarPagina(paginaActual + 1);
+                ShowPage(paginaActual + 1);
             }
         }
 
@@ -605,7 +647,7 @@ namespace SistemaDeInventariosToolCrib
         {
             if (paginaActual > 1)
             {
-                MostrarPagina(paginaActual - 1);
+                ShowPage(paginaActual - 1);
             }
         }
 
@@ -626,9 +668,9 @@ namespace SistemaDeInventariosToolCrib
         private void btnReset_Click(object sender, EventArgs e)
         {
             currentMaterialId = null;
-            currentPartNumber = string.Empty;
+            currentSku = string.Empty;
 
-            MostrarPagina(1);
+            ShowPage(1);
         }
     }
 }
