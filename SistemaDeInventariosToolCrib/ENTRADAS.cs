@@ -107,7 +107,8 @@ namespace SistemaDeInventariosToolCrib
                                 ubicacion, material, unidadDeMedida,
                                 proveedor, numeroDeSerie, costoUnitario,
                                 ramos, santa, aluminio, cobre, modificado
-                            FROM TOOLCRIB";
+                            FROM TOOLCRIB
+                            ORDER BY Id DESC";
 
             tablaCompleta.Clear();
 

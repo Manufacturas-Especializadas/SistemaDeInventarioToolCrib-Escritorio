@@ -33,28 +33,32 @@ namespace SistemaDeInventariosToolCrib
 
                     string query = @"
                         INSERT INTO TOOLCRIB 
-                            (linea, categoria,numeroDeParte, descripcion, ubicacion, fecha, hora, modificado, unidadDeMedida, existencias, minimo, maximo, proveedor, noSerial, precio, comentarios) 
+                            (ramos, santa, aluminio, cobre, linea, comentarios, categoria, sku, material, ubicacion, fecha, hora, modificado, unidadDeMedida, existencia, minimo, maximo, proveedor, numeroDeSerie, costoUnitario) 
                         VALUES 
-                            (@linea, @categoria ,@numeroDeParte, @descripcion, @ubicacion, @fecha, @hora, @modificado, @unidadDeMedida, @existencias, @minimo, @maximo, @proveedor, @noSerial, @precio, @comentarios)";
+                            (@ramos, @santa, @aluminio, @cobre, @linea, @comentarios, @categoria, @sku, @material, @ubicacion, @fecha, @hora, @modificado, @unidadDeMedida, @existencia, @minimo, @maximo, @proveedor, @numeroDeSerie, @costoUnitario)";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {                        
+                        cmd.Parameters.AddWithValue("@ramos", txtBxRamos.Text.Trim());
+                        cmd.Parameters.AddWithValue("@santa", txtBxSanta.Text.Trim());
+                        cmd.Parameters.AddWithValue("@aluminio", txtBxAluminio.Text.Trim());
+                        cmd.Parameters.AddWithValue("@cobre", txtBxCobre.Text.Trim());
                         cmd.Parameters.AddWithValue("@linea", txtBxLinea.Text.Trim());
+                        cmd.Parameters.AddWithValue("@comentarios", txtBxComentarios.Text.Trim());
                         cmd.Parameters.AddWithValue("@categoria", txtBxCategoria.Text.Trim());
-                        cmd.Parameters.AddWithValue("@numeroDeParte", txtBxNumeroDeParte.Text.Trim());
-                        cmd.Parameters.AddWithValue("@descripcion", txtBxDescripcion.Text.Trim());
+                        cmd.Parameters.AddWithValue("@sku", txtBxSku.Text.Trim());
                         cmd.Parameters.AddWithValue("@ubicacion", txtBxUbicacion.Text.Trim());
                         cmd.Parameters.AddWithValue("@fecha", txtBxFecha.Text.Trim());
                         cmd.Parameters.AddWithValue("@hora", txtBxHora.Text.Trim());
                         cmd.Parameters.AddWithValue("@modificado", txtBxModificado.Text.Trim());
                         cmd.Parameters.AddWithValue("@unidadDeMedida", txtBxUnidadDeMedida.Text.Trim());
-                        cmd.Parameters.AddWithValue("@existencias", txtBxExistencia.Text.Trim());
+                        cmd.Parameters.AddWithValue("@existencia", txtBxExistencia.Text.Trim());
                         cmd.Parameters.AddWithValue("@minimo", txtBxMinimo.Text.Trim());
-                        cmd.Parameters.AddWithValue("@maximo", txtBxMaximo.Text.Trim());
-                        cmd.Parameters.AddWithValue("@proveedor", txtBxProveedor.Text.Trim());
-                        cmd.Parameters.AddWithValue("@noSerial", txtBxNoSerial.Text.Trim());
-                        cmd.Parameters.AddWithValue("@precio", txtBxPrecio.Text.Trim());
-                        cmd.Parameters.AddWithValue("@comentarios", txtBxComentarios.Text.Trim());
+                        cmd.Parameters.AddWithValue("@maximo", txtBxMaterial.Text.Trim());
+                        cmd.Parameters.AddWithValue("proveedor", txtBxProveedor.Text.Trim());
+                        cmd.Parameters.AddWithValue("@numeroDeSerie", txtBxNumeroDeSerie.Text.Trim());
+                        cmd.Parameters.AddWithValue("@costoUnitario", txtBxCostoUnitario.Text.Trim());
+                        cmd.Parameters.AddWithValue("@material", txtBxMaterial.Text.Trim());
 
                         await cmd.ExecuteNonQueryAsync();
 
