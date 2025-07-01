@@ -22,7 +22,20 @@ namespace SistemaDeInventariosToolCrib
 
         private async void ENTRADAS_Load(object sender, EventArgs e)
         {
+            ConfigurarEstiloDataGridView();
             await LoadData();
+        }
+
+        private void ConfigurarEstiloDataGridView()
+        {
+            dtGdVwEntrada.Font = new Font("Arial", 12);
+            dtGdVwEntrada.DefaultCellStyle.Font = new Font("Arial", 12);
+            dtGdVwEntrada.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
+            dtGdVwEntrada.RowHeadersVisible = false;
+
+            dtGdVwEntrada.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dtGdVwEntrada.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtGdVwEntrada.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
         }
 
         private async void txtBxEntrada_KeyPress(object sender, KeyPressEventArgs e)
