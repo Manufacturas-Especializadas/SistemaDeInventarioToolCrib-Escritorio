@@ -27,8 +27,22 @@ namespace SistemaDeInventariosToolCrib
 
         private async void SALIDAS_Load(object sender, EventArgs e)
         {
-            await CargarDatos();
+            ConfigurarEstiloDataGridView();
+            await LoadData();
         }
+
+        private void ConfigurarEstiloDataGridView()
+        {
+            dtGdVwSalida.Font = new Font("Arial", 12);
+            dtGdVwSalida.DefaultCellStyle.Font = new Font("Arial", 12);
+            dtGdVwSalida.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
+            dtGdVwSalida.RowHeadersVisible = false;
+
+            dtGdVwSalida.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dtGdVwSalida.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtGdVwSalida.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
+        }
+
 
         private async void txtBxSalida_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -54,7 +68,7 @@ namespace SistemaDeInventariosToolCrib
 
                     if (found)
                     {
-                        MostrarSoloRegistro(currentMaterialId!.Value);
+                        await ShowOnlyRegister(currentMaterialId!.Value);
                     }
                     else
                     {
@@ -103,7 +117,7 @@ namespace SistemaDeInventariosToolCrib
             }
         }
 
-        private async Task CargarDatos()
+        private async Task LoadData()
         {
             string query = @"
                             SELECT
@@ -202,49 +216,81 @@ namespace SistemaDeInventariosToolCrib
             lbPagination.Text = $"Página {paginaActual} de {totalPages}";
         }
 
-        private void MostrarSoloRegistro(int id)
+        private async Task ShowOnlyRegister(int id)
         {
-            if (tablaCompleta.Rows.Count == 0)
+            try
             {
-                dtGdVwSalida.DataSource = null;
-                lbPagination.Text = "Página 1 de 1";
-                return;
-            }
-
-            DataTable filteredTable = tablaCompleta.Clone();
-            DataRow[] rows = tablaCompleta.Select($"Id = {id}");
-
-            if (rows.Length > 0)
-            {
-                foreach (DataRow row in rows)
+                using(SqlConnection conn = await ConnectionToDataBase.GetConnectionAsync())
                 {
-                    filteredTable.ImportRow(row);
+                    if(conn == null || conn.State != ConnectionState.Open)
+                    {
+                        MessageBox.Show("No se pudo conectar a la base de datos");
+
+                        return;
+                    }
+
+                    string query = @"
+                                SELECT 
+                                    Id, sku, existencia, minimo, maximo,
+                                    linea, comentarios, categoria, fecha, hora,
+                                    ubicacion, material, unidadDeMedida,
+                                    proveedor, numeroDeSerie, costoUnitario,
+                                    ramos, santa, aluminio, cobre, modificado
+                                FROM TOOLCRIB
+                                WHERE Id = @id;
+                            ";
+
+                    using(SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        using(SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                        {
+                            DataTable filteredTable = new DataTable();
+                            filteredTable.Load(reader);
+
+                            if(filteredTable.Rows.Count > 0)
+                            {
+                                RenameColumns(filteredTable);
+                                dtGdVwSalida.DataSource = filteredTable;
+                                lbPagination.Text = "Página 1 de 1";
+                            }
+                            else
+                            {
+                                MessageBox.Show("No se encontró el registro");
+                            }
+                        }
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se encontró el registro: {ex.Message}");
+            }
+        }
 
-            filteredTable.Columns["sku"]!.ColumnName = "Sku";
-            filteredTable.Columns["existencia"]!.ColumnName = "Existencia";
-            filteredTable.Columns["minimo"]!.ColumnName = "Minimo";
-            filteredTable.Columns["maximo"]!.ColumnName = "Maximo";
-            filteredTable.Columns["linea"]!.ColumnName = "Linea";
-            filteredTable.Columns["comentarios"]!.ColumnName = "Comentarios";
-            filteredTable.Columns["categoria"]!.ColumnName = "Categoria";
-            filteredTable.Columns["ubicacion"]!.ColumnName = "Ubicacion";
-            filteredTable.Columns["fecha"]!.ColumnName = "Fecha";
-            filteredTable.Columns["hora"]!.ColumnName = "Hora";
-            filteredTable.Columns["material"]!.ColumnName = "Material";
-            filteredTable.Columns["modificado"]!.ColumnName = "Modificado";
-            filteredTable.Columns["unidadDeMedida"]!.ColumnName = "Unidad de medida";
-            filteredTable.Columns["proveedor"]!.ColumnName = "Proveedor";
-            filteredTable.Columns["numeroDeSerie"]!.ColumnName = "Numero de serie";
-            filteredTable.Columns["costoUnitario"]!.ColumnName = "Costo unitario";
-            filteredTable.Columns["ramos"]!.ColumnName = "Ramos";
-            filteredTable.Columns["santa"]!.ColumnName = "Santa";
-            filteredTable.Columns["aluminio"]!.ColumnName = "Aluminio";
-            filteredTable.Columns["cobre"]!.ColumnName = "Cobre";
-
-            dtGdVwSalida.DataSource = filteredTable;
-            lbPagination.Text = "Página 1 de 1";
+        private void RenameColumns(DataTable dt)
+        {
+            dt.Columns["sku"]!.ColumnName = "Sku";
+            dt.Columns["existencia"]!.ColumnName = "Existencia";
+            dt.Columns["minimo"]!.ColumnName = "Minimo";
+            dt.Columns["maximo"]!.ColumnName = "Maximo";
+            dt.Columns["linea"]!.ColumnName = "Linea";
+            dt.Columns["comentarios"]!.ColumnName = "Comentarios";
+            dt.Columns["categoria"]!.ColumnName = "Categoria";
+            dt.Columns["ubicacion"]!.ColumnName = "Ubicacion";
+            dt.Columns["fecha"]!.ColumnName = "Fecha";
+            dt.Columns["hora"]!.ColumnName = "Hora";
+            dt.Columns["material"]!.ColumnName = "Material";
+            dt.Columns["modificado"]!.ColumnName = "Modificado";
+            dt.Columns["unidadDeMedida"]!.ColumnName = "Unidad de medida";
+            dt.Columns["proveedor"]!.ColumnName = "Proveedor";
+            dt.Columns["numeroDeSerie"]!.ColumnName = "Numero de serie";
+            dt.Columns["costoUnitario"]!.ColumnName = "Costo unitario";
+            dt.Columns["ramos"]!.ColumnName = "Ramos";
+            dt.Columns["santa"]!.ColumnName = "Santa";
+            dt.Columns["aluminio"]!.ColumnName = "Aluminio";
+            dt.Columns["cobre"]!.ColumnName = "Cobre";
         }
 
         private async void dtGdVwSalida_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -330,9 +376,9 @@ namespace SistemaDeInventariosToolCrib
 
                             if (row != null)
                             {
-                                row["existencias"] = Convert.ToInt32(row["existencias"]) - 1;
+                                row["existencia"] = Convert.ToInt32(row["existencia"]) - 1;
 
-                                MostrarSoloRegistro(id);
+                                await ShowOnlyRegister(id);
                             }
                         }
                     }
@@ -403,7 +449,7 @@ namespace SistemaDeInventariosToolCrib
 
                 if (eliminando)
                 {
-                    await CargarDatos();
+                    await LoadData();
                     MessageBox.Show("Registro eliminando correctamente");
                 }
                 else
